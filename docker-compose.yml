@@ -1,19 +1,12 @@
-version: "3.9"
+# Source: https://github.com/felipewom/docker-compose-postgres
+version: '3'
 services:
   database:
-    image: postgres:latest
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=supersecret
+    image: 'postgres:latest'
     ports:
-      - "5433:5433"
-    healthcheck:
-      test: psql -U postgres -q -d postgres -c "SELECT 'ready';"
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 5s
+      - "5432:5432"
 
-volumes:
-  db-data:
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dealhunter_database
