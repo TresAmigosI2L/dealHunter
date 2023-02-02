@@ -1,9 +1,11 @@
 package fr.ulco.dealhunter.models.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
 
 @AllArgsConstructor
+@Getter
 public class DealRequest {
     @NonNull
     private String title;

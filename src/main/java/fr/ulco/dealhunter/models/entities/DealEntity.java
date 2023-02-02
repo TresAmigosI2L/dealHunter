@@ -1,8 +1,10 @@
 package fr.ulco.dealhunter.models.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -18,17 +20,17 @@ public class DealEntity {
     private Long id;
     @ManyToOne
     private UserEntity author;
-    @Column(name="title")
+    @Column(name="title", nullable = false)
     private String title;
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "original_price")
+    @Column(name = "original_price", nullable = false)
     private Double originalPrice;
-    @Column(name = "discounted_price")
+    @Column(name = "discounted_price", nullable = false)
     private Double discountedPrice;
-    @Column(name="url")
+    @Column(name="url", nullable = false)
     private String url;
-    @Column(name="image_url")
+    @Column(name="image_url", nullable = false)
     private String imageUrl;
     @Basic
     @Column(name = "created_at", updatable = false, columnDefinition = "timestamp default current_timestamp")
