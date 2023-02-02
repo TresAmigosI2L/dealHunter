@@ -4,8 +4,6 @@ import lombok.NonNull;
 
 public class DealResponse {
     @NonNull
-    private String author;
-    @NonNull
     private String title;
     @NonNull
     private String description;

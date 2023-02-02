@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/deals")
 public class DealController {
-    @Autowired
-    private DealService dealService;
+    private final DealService dealService;
+
+    public DealController(@Autowired DealService dealService) {
+        this.dealService = dealService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createDeal(@RequestBody DealRequest dealRequest){
+    public void createDeal(@RequestBody DealRequest dealRequest) {
         dealService.createDeal(dealRequest);
     }
 }
