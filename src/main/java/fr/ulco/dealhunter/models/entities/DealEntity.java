@@ -39,4 +39,3 @@ public class DealEntity {
     @Column(name = "updated_at", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime updatedAt;
 }
-

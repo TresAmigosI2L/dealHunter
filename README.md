@@ -1,5 +1,11 @@
 # DealHunter
 
+## Start postgres
+
+```bash
+docker compose up --wait
+```
+
 ## Setup Intellij Hot Reload
 
 ### 1.
