@@ -1,18 +1,17 @@
 package fr.ulco.dealhunter.models.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@ToString
+@RequiredArgsConstructor
+@Builder
+@AllArgsConstructor
+@Entity
 @Table(name="deals")
 public class DealEntity {
     @Id
