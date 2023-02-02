@@ -11,17 +11,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name="deals")
 public class DealEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private UserEntity author;
-
     private String title;
     private String description;
     private Double originalPrice;
     private Double dealPrice;
-
-
 }
