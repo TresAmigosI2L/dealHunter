@@ -1,9 +1,12 @@
 package fr.ulco.dealhunter.models.mappers;
 
 import fr.ulco.dealhunter.models.dto.DealRequest;
-import org.springframework.context.annotation.Bean;
+import fr.ulco.dealhunter.models.entities.DealEntity;
+import org.mapstruct.Mapper;
 
-@Bean
+
+@Mapper
 public interface DealMapper {
-    DealRequest toDealEntity(DealRequest dealRequest);
+    DealEntity toDealEntity(DealRequest dealRequest);
+    DealRequest toDealRequest(DealEntity dealEntity );
 }
