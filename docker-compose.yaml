@@ -7,4 +7,4 @@ services:
     environment:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: dealhunter_db
+      POSTGRES_DB: default_database

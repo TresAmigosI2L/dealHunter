@@ -3,6 +3,8 @@ package fr.ulco.dealhunter.models.entities;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,13 +15,16 @@ import java.util.UUID;
  * Base entity for all entities (include an ID and timestamps)
  */
 @MappedSuperclass
+@Setter @Getter
 public abstract class BaseEntity {
     @Id
     @GeneratedValue
-    private UUID id;
+    protected UUID id;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    @GeneratedValue
+    protected LocalDateTime createdAt;
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    @GeneratedValue
+    protected LocalDateTime updatedAt;
 }
