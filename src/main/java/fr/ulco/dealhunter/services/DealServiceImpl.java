@@ -9,7 +9,9 @@ import fr.ulco.dealhunter.repositories.DealRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,16 +29,16 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
-    public DealResponseDto update(UUID uuid, UpdateDealRequestDto deal) throws EntityNotFoundException {
-        DealEntity dealEntity = dealRepository.findById(uuid).orElseThrow(() -> new EntityNotFoundException("Deal to update not found"));
+    public DealResponseDto update(UUID uuid, UpdateDealRequestDto deal) throws ResponseStatusException {
+        DealEntity dealEntity = dealRepository.findById(uuid).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Deal to update not found"));
         dealMapper.updateEntity(deal, dealEntity);
         dealRepository.save(dealEntity);
         return dealMapper.toDto(dealEntity);
     }
 
     @Override
-    public DealResponseDto get(UUID id) throws EntityNotFoundException {
-        DealEntity dealEntity = dealRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Deal not found"));
+    public DealResponseDto get(UUID id) throws ResponseStatusException {
+        DealEntity dealEntity = dealRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Deal not found"));
         return dealMapper.toDto(dealEntity);
     }
 
@@ -51,7 +53,7 @@ public class DealServiceImpl implements DealService {
         try {
             dealRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException("Deal to delete not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Deal to delete not found");
         }
     }
 }
