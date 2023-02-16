@@ -1,25 +1,55 @@
 package fr.ulco.dealhunter.controllers;
 
-import fr.ulco.dealhunter.models.dto.DealRequest;
-import fr.ulco.dealhunter.models.entities.DealEntity;
+import fr.ulco.dealhunter.models.dto.CreateDealRequestDto;
+import fr.ulco.dealhunter.models.dto.DealResponseDto;
+import fr.ulco.dealhunter.models.dto.UpdateDealRequestDto;
 import fr.ulco.dealhunter.services.DealService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-@RequestMapping("/deals")
+import java.net.URI;
+import java.util.List;
+import java.util.UUID;
+
 @RestController
+@RequestMapping("/api/deals")
+@RequiredArgsConstructor
 public class DealController {
-    @Autowired
     private final DealService dealService;
 
-    public DealController(DealService dealService) {
-        this.dealService = dealService;
+    @GetMapping
+    public ResponseEntity<List<DealResponseDto>> getDeals() {
+        List<DealResponseDto> dealsList = dealService.getAll();
+        return ResponseEntity.ok(dealsList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DealResponseDto> getDeal(@PathVariable("id") UUID uuid) {
+        DealResponseDto deal = dealService.get(uuid);
+        return ResponseEntity.ok(deal);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public DealEntity createDeal(@RequestBody DealRequest dealRequest) {
-        return dealService.createDeal(dealRequest);
+    public ResponseEntity<DealResponseDto> createDeal(@Valid @RequestBody CreateDealRequestDto deal) {
+        DealResponseDto createdDeal = dealService.create(deal);
+        URI createdDealLocation = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(createdDeal.getId()).toUri();
+        return ResponseEntity.created(createdDealLocation).body(createdDeal);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DealResponseDto> updateDeal(@PathVariable("id") UUID uuid, @Valid @RequestBody UpdateDealRequestDto deal) {
+        DealResponseDto updatedDeal = dealService.update(uuid, deal);
+        return ResponseEntity.ok(updatedDeal);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDeal(@PathVariable("id") UUID uuid) {
+        dealService.delete(uuid);
+        return ResponseEntity.noContent().build();
     }
 }

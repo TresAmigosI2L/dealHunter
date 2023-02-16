@@ -1,17 +1,20 @@
 spring:
-  devtools:
-    restart:
-      enabled: true  # Set to enable hot deployment
-      additional-paths: src/main/java # restart directory
-      exclude: WEB-INF/**
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: username
-    password: password
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-      dialect: org.hibernate.dialect.PostgreSQLDialect
-    database: postgresql
+    devtools:
+        restart:
+            enabled: true  # Set to enable hot deployment
+            additional-paths: src/main/java # restart directory
+            exclude: WEB-INF/**
+    datasource:
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: username
+        password: password
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: create-drop
+            naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+        database: postgresql
+server:
+    error:
+        include-stacktrace: never
