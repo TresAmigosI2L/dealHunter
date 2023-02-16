@@ -15,7 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.UUID;
 
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class DealService {
     private final DealRepository dealRepository;
     private final DealMapper dealMapper;

@@ -15,7 +15,8 @@ import java.util.UUID;
  * Base entity for all entities (include an ID and timestamps)
  */
 @MappedSuperclass
-@Setter @Getter
+@Setter
+@Getter
 public abstract class BaseEntity {
     @Id
     @GeneratedValue

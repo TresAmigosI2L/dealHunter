@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DealHunterApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DealHunterApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DealHunterApplication.class, args);
+    }
 
 }

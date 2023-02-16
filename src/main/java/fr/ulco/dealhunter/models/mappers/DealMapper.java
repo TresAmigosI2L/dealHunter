@@ -15,7 +15,9 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface DealMapper {
     DealEntity toEntity(CreateDealRequestDto dto);
+
     DealResponseDto toDto(DealEntity entity);
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(UpdateDealRequestDto dto, @MappingTarget DealEntity entity);
 
