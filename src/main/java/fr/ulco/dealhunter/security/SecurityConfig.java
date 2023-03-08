@@ -45,7 +45,13 @@ public class SecurityConfig {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .formLogin();
+
+        http
+                .logout()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
+
         return http.build();
     }
 }

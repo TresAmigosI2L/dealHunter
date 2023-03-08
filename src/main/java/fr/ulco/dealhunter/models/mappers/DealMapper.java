@@ -1,8 +1,8 @@
 package fr.ulco.dealhunter.models.mappers;
 
-import fr.ulco.dealhunter.models.dto.CreateDealRequestDto;
-import fr.ulco.dealhunter.models.dto.DealResponseDto;
-import fr.ulco.dealhunter.models.dto.UpdateDealRequestDto;
+import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
+import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
+import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
 import fr.ulco.dealhunter.models.entities.DealEntity;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
