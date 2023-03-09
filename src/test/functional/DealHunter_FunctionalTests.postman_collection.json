@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "204c322e-fa1f-4333-9c0f-56001725cd95",
+		"_postman_id": "b82cec34-f056-44c8-8db5-81b712d120f2",
 		"name": "DealHunter_FunctionalTests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "23125789"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -294,7 +293,7 @@
 					"name": "CRUD flow Deals",
 					"item": [
 						{
-							"name": "Should create a deal",
+							"name": "Should create a deal (in prescript)",
 							"event": [
 								{
 									"listen": "prerequest",
@@ -312,6 +311,8 @@
 											"        })",
 											"    }",
 											"}, function (err, res) {",
+											"    console.log(err)",
+											"    console.log(res)",
 											"    pm.collectionVariables.set(\"crudflow_dealId\", res.json().id);",
 											"});"
 										],
@@ -459,7 +460,7 @@
 							"response": []
 						},
 						{
-							"name": "New Request",
+							"name": "Should delete the created deal",
 							"event": [
 								{
 									"listen": "test",
@@ -490,6 +491,41 @@
 							"response": []
 						}
 					]
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "admin",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}
