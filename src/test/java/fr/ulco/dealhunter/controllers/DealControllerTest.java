@@ -1,6 +1,5 @@
 package fr.ulco.dealhunter.controllers;
 
-import com.nimbusds.jose.shaded.gson.*;
 import fr.ulco.dealhunter.models.entities.DealEntity;
 import fr.ulco.dealhunter.repositories.DealRepository;
 import fr.ulco.dealhunter.repositories.UserRepository;
@@ -19,18 +18,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.lang.reflect.Type;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc(addFilters = false) //disable auth for testing purposes
+@AutoConfigureMockMvc(addFilters = false) // addFilters to false : disable auth for testing purposes
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = DealControllerTest.TestConfig.class)
 class DealControllerTest {
@@ -72,12 +70,9 @@ class DealControllerTest {
     void getDeals() throws Exception{
         DealEntity dealEntity = mockFakeDealEntity();
         UUID id = dealEntity.getId();
+        when(dealRepository.findAll()).thenReturn(List.of(dealEntity));
 
-        when(dealRepository.findAll()).thenReturn(Arrays.asList(dealEntity));
-
-        final var request = MockMvcRequestBuilders.get("/api/deals");
-
-        mockMvc.perform(request)
+        mockMvc.perform(get("/api/deals"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -91,12 +86,9 @@ class DealControllerTest {
     void getDeal() throws Exception {
         DealEntity dealEntity = mockFakeDealEntity();
         UUID id = dealEntity.getId();
-
         when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
 
-        final var request = MockMvcRequestBuilders.get("/api/deals/"+id);
-
-        mockMvc.perform(request)
+        mockMvc.perform(get("/api/deals/"+id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("id").value(id.toString()))
@@ -123,7 +115,6 @@ class DealControllerTest {
     void updateDeal() throws Exception{
         DealEntity dealEntity = mockFakeDealEntity();
         UUID id = dealEntity.getId();
-
         when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
 
         final var request = MockMvcRequestBuilders
@@ -142,16 +133,12 @@ class DealControllerTest {
     @Test
     void createDeal() throws Exception{
         DealEntity dealEntity = mockFakeDealEntity();
-        UUID id = dealEntity.getId();
-
         when(dealRepository.save(dealEntity)).thenReturn(dealEntity);
 
-        final var request = MockMvcRequestBuilders
-                .post("/api/deals")
-                .content("{\"title\":\"title\",\"active\":true}")
-                .contentType("application/json");
-
-        mockMvc.perform(request)
+        mockMvc.perform(post("/api/deals").
+                        content("{\"title\":\"title\",\"active\":true}")
+                        .contentType("application/json")
+                )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("title").value("title"))
@@ -161,14 +148,11 @@ class DealControllerTest {
 
     private DealEntity mockFakeDealEntity() {
         UUID id = UUID.randomUUID();
-        LocalDateTime localDateTime = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         DealEntity dealEntity = new DealEntity();
         dealEntity.setId(id);
         dealEntity.setTitle("title");
         dealEntity.setActive(true);
-        dealEntity.setCreatedAt(localDateTime);
-        dealEntity.setUpdatedAt(localDateTime);
 
         return dealEntity;
     }

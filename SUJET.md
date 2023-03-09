@@ -11,9 +11,9 @@ Le minimum:
 
 - [ ] Le schéma de votre infrastructure n-tier
 - [ ] Une base de données avec au moins deux tables (On ne compte pas les tables de jointures). Avec une ou des relations.
-- [x] Le modèle de la base lié grâce à Hibernate et Spring Data.
-- [x] Le projet devra compiler pour java 11+ à l'aide de Maven.
-- [x] Une authentification en Basic avec Spring Sécurité.
+- [X] Le modèle de la base lié grâce à Hibernate et Spring Data.
+- [X] Le projet devra compiler pour java 11+ à l'aide de Maven.
+- [X] Une authentification en Basic avec Spring Sécurité. => on a poussé vers une OAUTH2 avec Bearer
 - [ ] Au moins deux endpoints correspondant à des besoins utilisateurs.
 - [ ] Une API utilisant JSON et Spring REST.
 - [ ] La partie front qui appelle l'API.
