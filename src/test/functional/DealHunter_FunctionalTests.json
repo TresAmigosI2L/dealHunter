@@ -1,0 +1,634 @@
+{
+	"info": {
+		"_postman_id": "e31b3ce4-391d-4983-bd91-53aaf197739a",
+		"name": "DealHunter_FunctionalTests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Deals",
+			"item": [
+				{
+					"name": "User admin",
+					"item": [
+						{
+							"name": "/register",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\":\"maxime.vitse@decathlon.com\",\n    \"password\":\"admin123\",\n    \"confirmPassword\":\"admin123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/auth/register",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "/login",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// TODO pm in global the bearer from the headers"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\":\"maxime.vitse@decathlon.com\",\n    \"password\":\"admin123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/auth/login",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Getting deals",
+					"item": [
+						{
+							"name": "Should get all deals",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response is an array\", function () {",
+											"    const jsonData = pm.response.json();",
+											"    pm.expect(typeof jsonData.createdAt === \"array\")",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/deals",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Should 404 if deal not found",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/deals/{{$randomUUID}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"{{$randomUUID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Should 400 if provided ID is not UUID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body has error failed to convert String to UUID\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: 1\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/deals/c4db440b-2f5c-4546-858b-2aa4ad3e7553",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"c4db440b-2f5c-4546-858b-2aa4ad3e7553"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Creating deals",
+					"item": [
+						{
+							"name": "Should create a deal",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Status code name has string\", function () {",
+											"    pm.response.to.have.status(\"Created\");",
+											"});",
+											"",
+											"pm.test(\"Response body is complete\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.exist;",
+											"    pm.expect(typeof jsonData.id === \"string\")",
+											"    pm.expect(jsonData.title).to.exist;",
+											"    pm.expect(typeof jsonData.title === \"string\")",
+											"    pm.expect(jsonData.active).to.exist;",
+											"    pm.expect(typeof jsonData.active === \"boolean\")",
+											"    pm.expect(jsonData.createdAt).to.exist;",
+											"    pm.expect(typeof jsonData.createdAt === \"string\")",
+											"    pm.expect(jsonData.updatedAt).to.exist;",
+											"    pm.expect(typeof jsonData.createdAt === \"string\")",
+											"});",
+											"",
+											"pm.test(\"Created deal has active field to true\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.active).to.be.eql(true)",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"My deal\",\n    \"active\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/deals",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Should create a deal with default active value",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Status code name has string\", function () {",
+											"    pm.response.to.have.status(\"Created\");",
+											"});",
+											"",
+											"pm.test(\"Response body is complete\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.id).to.exist;",
+											"    pm.expect(typeof jsonData.id === \"string\")",
+											"    pm.expect(jsonData.title).to.exist;",
+											"    pm.expect(typeof jsonData.title === \"string\")",
+											"    pm.expect(jsonData.active).to.exist;",
+											"    pm.expect(typeof jsonData.active === \"boolean\")",
+											"    pm.expect(jsonData.createdAt).to.exist;",
+											"    pm.expect(typeof jsonData.createdAt === \"string\")",
+											"    pm.expect(jsonData.updatedAt).to.exist;",
+											"    pm.expect(typeof jsonData.createdAt === \"string\")",
+											"});",
+											"",
+											"pm.test(\"Created deal has active field to false (default value)\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.active).to.be.eql(false)",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"My deal\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/deals",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Should not create a deal if title not provided",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Response contains \\\"Title is required\\\"\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Title is required\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"active\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/deals",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "CRUD flow Deals",
+					"item": [
+						{
+							"name": "Should create a deal (in prescript)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.sendRequest({",
+											"    url: pm.collectionVariables.get(\"apiUrl\") + \"/deals\",",
+											"    method: 'POST',",
+											"    header: 'Content-Type: application/json',",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            \"title\": \"My deal\",",
+											"            \"active\": true",
+											"        })",
+											"    }",
+											"}, function (err, res) {",
+											"    console.log(err)",
+											"    console.log(res)",
+											"    pm.collectionVariables.set(\"crudflow_dealId\", res.json().id);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Active is false\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.active).to.eql(true);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"My deal\",\n    \"active\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/deals/{{crudflow_dealId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"{{crudflow_dealId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Should update the created deal (active field)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Change is done\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.active).to.eql(false);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"active\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/deals/{{crudflow_dealId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"{{crudflow_dealId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Should update the created deal (title field)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Previous change is kept\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.active).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Change is done\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.title).to.eql(\"My renamed deal\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"My renamed deal\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiUrl}}/deals/{{crudflow_dealId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"{{crudflow_dealId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Should delete the created deal",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/deals/{{crudflow_dealId}}",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"{{crudflow_dealId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJiMzQzYzFlNi0wMzkzLTQwYWUtYWNmZC0xZmRkODkzNmVhYzY6bWF4aW1lLnZpdHNlQGRlY2F0aGxvbi5jb20iLCJpZCI6ImIzNDNjMWU2LTAzOTMtNDBhZS1hY2ZkLTFmZGQ4OTM2ZWFjNiIsImV4cCI6MTY3ODQxODQxMSwiaWF0IjoxNjc4MzgyNDExLCJyb2xlcyI6IiJ9.c19YZj9YjofRt97OKOkvm5KkBtF-h_RgBafRnwIWv7-YbpW_JWiIn32dPdteJkHt-Kspq_n_ygvA0iiY-7ojKS3cKqaK_kqV6ikAGZDsyFWLxr_fWpo_E_QkMDG99QgNreZCn9SglYWQ0qyNY3P5MjHMcGsofykAwXCmnxBKoP3tboeILBHFWwYz96wlkASmVlw2lCtP8t76mHMjcti2cc7PLaQ1vGEgK6fDGujsVNOIpLWwEs0SEjWpk8rtjkcxX8J31yo6DpTDHOqfrsUu7fD_9Y19ahoYqjDu5cPnaDySRTF8EZJ_g-Ne9a_Cw19ZOREzUGvu-bM4WGw3nznMBEjDJd40p3ZmM5nljYYHUrJuKlCEDPxmMl1RqPRAFXvY1dlw4fDAQXs8AYWGjnSWqO0U1-JPDzK9xs7R16uYzvua0tQlFRt994vs_E0MyEeKiFh67UsmBMQqydPzUMXxqQlBdlt7KcezAbfm9MqstZgYZwiTeuwnXpE1mBYEJ9lTKYWi5NX4agCFEgiXP25RfIQWX-q-9oZ4zX8Pn6h0tuIyaUxMaAKtt2OI39Bbn3NT4fr4SOFLO2QHbPTrCCpcetcAoMMbZi7T_MoUr6Oyuk0rczLw9euTeT24XuZ9NffNQKSCd6dY2hjipfikrcgkM-OoiNWnNA-TQ6B1UUFeUns",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "apiUrl",
+			"value": "http://localhost:8080/api"
+		},
+		{
+			"key": "crudflow_dealId",
+			"value": ""
+		}
+	]
+}
