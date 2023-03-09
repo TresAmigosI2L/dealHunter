@@ -1,4 +1,4 @@
-package fr.ulco.dealhunter.models.dto;
+package fr.ulco.dealhunter.models.dto.deal;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

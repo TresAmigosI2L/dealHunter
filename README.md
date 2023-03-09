@@ -1,21 +1,31 @@
-# DealHunter
+# Sujet
 
-## Start postgres
+[SUJET.md](./SUJET.md)
+
+# Setup
+
+[💻 DEV.md](./DEV.md)
+
+# DealHunter test
+
+## Functional tests
+
+### Requirements
+
+- Database Running
+- API Running
+- NewMan installed (https://learning.postman.com/docs/running-collections/using-newman-cli/installing-running-newman/)
+
+### Run
 
 ```bash
-docker compose up --wait
+newman run src/test/functional/DealHunter_FunctionalTests.postman_collection.json
 ```
 
-## Setup Intellij Hot Reload
+## Unit tests
 
-### 1.
+> WIP
 
-First select `File -> Setting -> Build,Execution,Deployment -> Compile`.
+## Integration tests
 
-Then, check the `Make project automatically`.
-
-### 2.
-
-Go to `File -> Setting -> Advanced Settings`
-
-Then, check the `Allow auto-make to start even [...]`.
+> WIP
