@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * A DTO to create a {@link fr.ulco.dealhunter.models.entities.TODO} entity
+ * A DTO to create a {@link fr.ulco.dealhunter.models.entities.UserEntity} entity
  */
 @Data
 public class CreateUserRequestDto implements Serializable {

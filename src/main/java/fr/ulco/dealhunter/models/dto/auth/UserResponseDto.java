@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * A DTO to create a {@link fr.ulco.dealhunter.models.entities.TODO} entity
+ * A DTO to output a {@link fr.ulco.dealhunter.models.entities.UserEntity} entity
  */
 @Data
 public class UserResponseDto implements Serializable {

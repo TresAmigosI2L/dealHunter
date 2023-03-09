@@ -29,6 +29,9 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByUsername(newUserRequest.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
+        if (!newUserRequest.getPassword().equals(newUserRequest.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
 
         UserEntity user = userMapper.toEntity(newUserRequest);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

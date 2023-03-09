@@ -7,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * A DTO to create a {@link fr.ulco.dealhunter.models.entities.TODO} entity
+ * A DTO to authenticate to a {@link fr.ulco.dealhunter.models.entities.UserEntity} entity
  */
 @Data
 public class AuthRequestDto implements Serializable {
