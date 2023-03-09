@@ -1,7 +1,9 @@
 package fr.ulco.dealhunter.controllers;
 
+import com.nimbusds.jose.shaded.gson.*;
 import fr.ulco.dealhunter.models.entities.DealEntity;
 import fr.ulco.dealhunter.repositories.DealRepository;
+import fr.ulco.dealhunter.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -16,7 +18,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import java.nio.charset.StandardCharsets;
+
+import java.lang.reflect.Type;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
@@ -24,7 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false) //disable auth for testing purposes
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = DealControllerTest.TestConfig.class)
 class DealControllerTest {
@@ -45,6 +51,11 @@ class DealControllerTest {
         public DealRepository dealRepository() {
             return Mockito.mock(DealRepository.class);
         }
+
+        @Bean
+        public UserRepository userRepository() {
+            return Mockito.mock(UserRepository.class);
+        }
     }
 
     @Test
@@ -62,10 +73,9 @@ class DealControllerTest {
         DealEntity dealEntity = mockFakeDealEntity();
         UUID id = dealEntity.getId();
 
-        final var basicPayload = Base64.getEncoder()
-                .encodeToString("admin:admin".getBytes(StandardCharsets.UTF_8));
-        final var request = MockMvcRequestBuilders.get("/api/deals")
-                .header("Authorization", "Basic " + basicPayload);
+        when(dealRepository.findAll()).thenReturn(Arrays.asList(dealEntity));
+
+        final var request = MockMvcRequestBuilders.get("/api/deals");
 
         mockMvc.perform(request)
                 .andExpect(status().is2xxSuccessful())
@@ -82,10 +92,9 @@ class DealControllerTest {
         DealEntity dealEntity = mockFakeDealEntity();
         UUID id = dealEntity.getId();
 
-        final var basicPayload = Base64.getEncoder()
-                .encodeToString("admin:admin".getBytes(StandardCharsets.UTF_8));
-        final var request = MockMvcRequestBuilders.get("/api/deals/"+id)
-                .header("Authorization", "Basic " + basicPayload);
+        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
+
+        final var request = MockMvcRequestBuilders.get("/api/deals/"+id);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
@@ -95,16 +104,71 @@ class DealControllerTest {
                 .andExpect(jsonPath("active").value(true));
     }
 
+    @Test
+    void deleteDeal() throws Exception{
+        DealEntity dealEntity = mockFakeDealEntity();
+        UUID id = dealEntity.getId();
+
+        final var request = MockMvcRequestBuilders.delete("/api/deals/"+id);
+
+        mockMvc.perform(request)
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$").doesNotExist())
+                .andExpect(jsonPath("id").doesNotExist())
+                .andExpect(jsonPath("title").doesNotExist())
+                .andExpect(jsonPath("active").doesNotExist());
+    }
+
+    @Test
+    void updateDeal() throws Exception{
+        DealEntity dealEntity = mockFakeDealEntity();
+        UUID id = dealEntity.getId();
+
+        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
+
+        final var request = MockMvcRequestBuilders
+                .put("/api/deals/"+id)
+                .content("{\"title\":\"new title\",\"active\":false}")
+                .contentType("application/json");
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("id").value(id.toString()))
+                .andExpect(jsonPath("title").value("new title"))
+                .andExpect(jsonPath("active").value(false));
+    }
+
+    @Test
+    void createDeal() throws Exception{
+        DealEntity dealEntity = mockFakeDealEntity();
+        UUID id = dealEntity.getId();
+
+        when(dealRepository.save(dealEntity)).thenReturn(dealEntity);
+
+        final var request = MockMvcRequestBuilders
+                .post("/api/deals")
+                .content("{\"title\":\"title\",\"active\":true}")
+                .contentType("application/json");
+
+        mockMvc.perform(request)
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("title").value("title"))
+                .andExpect(jsonPath("active").value(true));
+    }
+
+
     private DealEntity mockFakeDealEntity() {
         UUID id = UUID.randomUUID();
+        LocalDateTime localDateTime = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         DealEntity dealEntity = new DealEntity();
         dealEntity.setId(id);
         dealEntity.setTitle("title");
         dealEntity.setActive(true);
-
-        when(dealRepository.findAll()).thenReturn(Arrays.asList(dealEntity));
-        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
+        dealEntity.setCreatedAt(localDateTime);
+        dealEntity.setUpdatedAt(localDateTime);
 
         return dealEntity;
     }
