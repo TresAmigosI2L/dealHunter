@@ -19,7 +19,7 @@
 ### Run
 
 ```bash
-newman run src/test/functional/DealHunter_FunctionalTests.postman_collection.json
+newman run src/test/functional/DealHunter_FunctionalTests.json
 ```
 
 ## Unit tests
