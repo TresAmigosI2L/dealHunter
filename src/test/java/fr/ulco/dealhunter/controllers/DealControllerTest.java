@@ -1,16 +1,18 @@
 package fr.ulco.dealhunter.controllers;
 
-import fr.ulco.dealhunter.models.dto.DealResponseDto;
 import fr.ulco.dealhunter.models.entities.DealEntity;
 import fr.ulco.dealhunter.repositories.DealRepository;
-import fr.ulco.dealhunter.services.DealService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,49 +23,44 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-// FIXME: This test fails when DB is off, it shouldn't
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
+@ContextConfiguration(classes = DealControllerTest.TestConfig.class)
 class DealControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Mock
-    private DealRepository dealRepository;
 
-   // @Mock
-    //private DealService dealService;
+    @Autowired
+    private DealRepository dealRepository;
 
     @InjectMocks
     private DealController dealController;
 
+    @EnableJpaRepositories
+    @TestConfiguration
+    public static class TestConfig {
+        @Bean
+        public DealRepository dealRepository() {
+            return Mockito.mock(DealRepository.class);
+        }
+    }
+
     @Test
     void getDealsEmpty() throws Exception {
+        when(dealRepository.findAll()).thenReturn(Collections.emptyList());
+
         mockMvc.perform(get("/api/deals"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
     }
 
-    // FIXME: This test fails, it shouldn't (mock on `dealService.getAll()` doesnt work)
     @Test
-    void getDeals() throws Exception {
-        UUID id = UUID.randomUUID();
-
-        DealEntity dealEntity = new DealEntity();
-        dealEntity.setId(id);
-        dealEntity.setTitle("title");
-        dealEntity.setActive(true);
-
-        DealResponseDto dealResponseDto = new DealResponseDto();
-        dealResponseDto.setId(id);
-        dealResponseDto.setTitle("title");
-        dealResponseDto.setActive(true);
-
-        when(dealRepository.findAll()).thenReturn(Arrays.asList(dealEntity));
-        //when(dealService.getAll()).thenReturn(Arrays.asList(dealResponseDto));
-
+    void getDeals() throws Exception{
+        DealEntity dealEntity = mockFakeDealEntity();
+        UUID id = dealEntity.getId();
 
         final var basicPayload = Base64.getEncoder()
                 .encodeToString("admin:admin".getBytes(StandardCharsets.UTF_8));
@@ -76,6 +73,39 @@ class DealControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$[0].id").value(id.toString()))
-                .andExpect(content().json("[]"));
+                .andExpect(jsonPath("$[0].title").value("title"))
+                .andExpect(jsonPath("$[0].active").value(true));
+    }
+
+    @Test
+    void getDeal() throws Exception {
+        DealEntity dealEntity = mockFakeDealEntity();
+        UUID id = dealEntity.getId();
+
+        final var basicPayload = Base64.getEncoder()
+                .encodeToString("admin:admin".getBytes(StandardCharsets.UTF_8));
+        final var request = MockMvcRequestBuilders.get("/api/deals/"+id)
+                .header("Authorization", "Basic " + basicPayload);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("id").value(id.toString()))
+                .andExpect(jsonPath("title").value("title"))
+                .andExpect(jsonPath("active").value(true));
+    }
+
+    private DealEntity mockFakeDealEntity() {
+        UUID id = UUID.randomUUID();
+
+        DealEntity dealEntity = new DealEntity();
+        dealEntity.setId(id);
+        dealEntity.setTitle("title");
+        dealEntity.setActive(true);
+
+        when(dealRepository.findAll()).thenReturn(Arrays.asList(dealEntity));
+        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
+
+        return dealEntity;
     }
 }
