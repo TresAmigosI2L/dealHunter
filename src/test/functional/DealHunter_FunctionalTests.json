@@ -13,6 +13,20 @@
 					"item": [
 						{
 							"name": "/register",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
 							"request": {
 								"auth": {
 									"type": "noauth"
@@ -48,7 +62,24 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"// TODO pm in global the bearer from the headers"
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// TODO pm in global the bearer from the headers",
+											"",
+											"var bearer = pm.response.headers.get('Authorization').split(\" \");",
+											"pm.globals.set(\"bearer\",bearer[1]);",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -596,7 +627,12 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJiMzQzYzFlNi0wMzkzLTQwYWUtYWNmZC0xZmRkODkzNmVhYzY6bWF4aW1lLnZpdHNlQGRlY2F0aGxvbi5jb20iLCJpZCI6ImIzNDNjMWU2LTAzOTMtNDBhZS1hY2ZkLTFmZGQ4OTM2ZWFjNiIsImV4cCI6MTY3ODQxODQxMSwiaWF0IjoxNjc4MzgyNDExLCJyb2xlcyI6IiJ9.c19YZj9YjofRt97OKOkvm5KkBtF-h_RgBafRnwIWv7-YbpW_JWiIn32dPdteJkHt-Kspq_n_ygvA0iiY-7ojKS3cKqaK_kqV6ikAGZDsyFWLxr_fWpo_E_QkMDG99QgNreZCn9SglYWQ0qyNY3P5MjHMcGsofykAwXCmnxBKoP3tboeILBHFWwYz96wlkASmVlw2lCtP8t76mHMjcti2cc7PLaQ1vGEgK6fDGujsVNOIpLWwEs0SEjWpk8rtjkcxX8J31yo6DpTDHOqfrsUu7fD_9Y19ahoYqjDu5cPnaDySRTF8EZJ_g-Ne9a_Cw19ZOREzUGvu-bM4WGw3nznMBEjDJd40p3ZmM5nljYYHUrJuKlCEDPxmMl1RqPRAFXvY1dlw4fDAQXs8AYWGjnSWqO0U1-JPDzK9xs7R16uYzvua0tQlFRt994vs_E0MyEeKiFh67UsmBMQqydPzUMXxqQlBdlt7KcezAbfm9MqstZgYZwiTeuwnXpE1mBYEJ9lTKYWi5NX4agCFEgiXP25RfIQWX-q-9oZ4zX8Pn6h0tuIyaUxMaAKtt2OI39Bbn3NT4fr4SOFLO2QHbPTrCCpcetcAoMMbZi7T_MoUr6Oyuk0rczLw9euTeT24XuZ9NffNQKSCd6dY2hjipfikrcgkM-OoiNWnNA-TQ6B1UUFeUns",
+				"value": "{{bearer}}",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "{{bearer}}",
 				"type": "string"
 			}
 		]

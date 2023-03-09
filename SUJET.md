@@ -22,8 +22,8 @@ Ce qui peut être ajouté:
 
 - [ ] Une suite de tests Spring.
 - [ ] Une web socket.
-- [ ] Mise en place d'un cache guava.
 - [ ] Une CI avec Jenkins ou Git Action qui compile le code et lance les tests.
+- [ ] Mise en place d'un cache guava.
 
 BONUS:
 
