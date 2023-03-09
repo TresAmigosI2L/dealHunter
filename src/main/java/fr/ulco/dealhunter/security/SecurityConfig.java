@@ -11,6 +11,11 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -53,5 +58,23 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID");
 
         return http.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        final var source = new UrlBasedCorsConfigurationSource();
+        final var config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOriginPatterns(Collections.singletonList("*"));
+        config.addExposedHeader("Authorization, x-xsrf-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, " +
+                "Content-Type, Access-Control-Request-Method, Location");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("OPTIONS");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }
