@@ -23,13 +23,10 @@ public class AuthService {
     private final JwtEncoder jwtEncoder;
 
     public String generateToken(AuthRequestDto authRequest) {
-        return this.generateToken(authRequest.getUsername(), authRequest.getPassword());
-    }
-
-    private String generateToken(String username, String password) {
         var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
         );
+
 
         var user = (UserEntity) authentication.getPrincipal();
 
@@ -54,12 +51,8 @@ public class AuthService {
     }
 
     public UserEntity authenticateUser(AuthRequestDto authRequest) {
-        return this.authenticateUser(authRequest.getUsername(), authRequest.getPassword());
-    }
-
-    private UserEntity authenticateUser(String username, String password) {
         var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
         );
         return (UserEntity) authentication.getPrincipal();
     }
