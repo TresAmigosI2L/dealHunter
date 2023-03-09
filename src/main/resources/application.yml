@@ -18,3 +18,8 @@ spring:
 server:
     error:
         include-stacktrace: never
+jwt:
+    private:
+        key: classpath:rsa.private.key
+    public:
+        key: classpath:rsa.public.key
