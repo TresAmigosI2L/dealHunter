@@ -3,6 +3,7 @@ package fr.ulco.dealhunter.models.dto.auth;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -12,4 +13,6 @@ import java.util.UUID;
 public class UserResponseDto implements Serializable {
     UUID id;
     String username;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
