@@ -1,5 +1,7 @@
 package fr.ulco.dealhunter.services;
 
+import fr.ulco.dealhunter.exceptions.PasswordMismatchException;
+import fr.ulco.dealhunter.exceptions.UserAlreadyExistsException;
 import fr.ulco.dealhunter.models.dto.auth.CreateUserRequestDto;
 import fr.ulco.dealhunter.models.dto.auth.UserResponseDto;
 import fr.ulco.dealhunter.models.entities.UserEntity;
@@ -25,12 +27,12 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserResponseDto create(CreateUserRequestDto newUserRequest) {
+    public UserResponseDto create(CreateUserRequestDto newUserRequest) throws UserAlreadyExistsException, PasswordMismatchException {
         if (userRepository.findByUsername(newUserRequest.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new UserAlreadyExistsException(newUserRequest.getUsername());
         }
         if (!newUserRequest.getPassword().equals(newUserRequest.getConfirmPassword())) {
-            throw new IllegalArgumentException("Passwords do not match");
+            throw new PasswordMismatchException();
         }
 
         UserEntity user = userMapper.toEntity(newUserRequest);
