@@ -20,6 +20,8 @@ public class AuthController {
     private final UserService userService;
     private final AuthService authService;
 
+    // We can secure an endpoint with the @Secured("ADMIN") annotation
+
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(@RequestBody @Valid AuthRequestDto authRequest) {
         var token = authService.generateToken(authRequest);
