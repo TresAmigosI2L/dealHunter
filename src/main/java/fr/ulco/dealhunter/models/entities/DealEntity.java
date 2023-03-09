@@ -17,4 +17,5 @@ public class DealEntity extends BaseEntity {
     private String title;
     @NotNull(message = "Active is required")
     private boolean active;
+    private String author;
 }

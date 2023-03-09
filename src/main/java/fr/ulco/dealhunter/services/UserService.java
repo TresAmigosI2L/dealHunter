@@ -8,7 +8,6 @@ import fr.ulco.dealhunter.models.entities.UserEntity;
 import fr.ulco.dealhunter.models.mappers.UserMapper;
 import fr.ulco.dealhunter.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,27 +47,10 @@ public class UserService implements UserDetailsService {
                 .map(userMapper::toOutputDto);
     }
 
-    public Optional<UserResponseDto> getByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .map(userMapper::toOutputDto);
-    }
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(format("User with username - %s, not found", username)));
-    }
-
-    public Optional<UserResponseDto> getAuthenticatedUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-        return this.getByUsername(username);
     }
 }

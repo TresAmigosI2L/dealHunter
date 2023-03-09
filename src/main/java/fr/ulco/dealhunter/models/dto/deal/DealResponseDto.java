@@ -16,4 +16,5 @@ public class DealResponseDto implements Serializable {
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String author;
 }

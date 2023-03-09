@@ -1,5 +1,6 @@
 package fr.ulco.dealhunter.services;
 
+import fr.ulco.dealhunter.models.dto.auth.UserResponseDto;
 import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
 import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
@@ -19,9 +20,11 @@ import java.util.UUID;
 public class DealService {
     private final DealRepository dealRepository;
     private final DealMapper dealMapper;
+    private final AuthService authService;
 
     public DealResponseDto create(CreateDealRequestDto deal) {
         DealEntity dealEntity = dealMapper.toEntity(deal);
+        dealEntity.setAuthor(authService.getUsernameOfAuthenticatedUser());
         dealRepository.save(dealEntity);
         return dealMapper.toDto(dealEntity);
     }
