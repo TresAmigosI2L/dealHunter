@@ -598,6 +598,83 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Votes deals",
+					"item": [
+						{
+							"name": "upvote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body has error failed to convert String to UUID\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: 1\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/deals/c1954808-6d09-4aae-8665-0d5033c4ac1c/upvote",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"c1954808-6d09-4aae-8665-0d5033c4ac1c",
+										"upvote"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "downvote",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body has error failed to convert String to UUID\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: 1\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/deals/c1954808-6d09-4aae-8665-0d5033c4ac1c/downvote",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"c1954808-6d09-4aae-8665-0d5033c4ac1c",
+										"downvote"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			],
 			"event": [

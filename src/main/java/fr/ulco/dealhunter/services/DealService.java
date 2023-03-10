@@ -49,4 +49,17 @@ public class DealService {
     public void delete(UUID id) throws EmptyResultDataAccessException {
         dealRepository.deleteById(id);
     }
+
+    public DealResponseDto voteDeal(UUID uuid, int voteDirection) {
+        Optional<DealEntity> dealOpt = dealRepository.findById(uuid);
+        if (dealOpt.isPresent()) {
+            DealEntity deal = dealOpt.get();
+            deal.setVotes(deal.getVotes() + voteDirection);
+            dealRepository.save(deal);
+            return dealMapper.toDto(deal);
+        } else {
+            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
+        }
+    }
+
 }

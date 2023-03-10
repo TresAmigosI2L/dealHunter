@@ -6,6 +6,7 @@ import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
 import fr.ulco.dealhunter.services.DealService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,8 +28,8 @@ public class DealController {
         return ResponseEntity.ok(dealsList);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DealResponseDto> getDeal(@PathVariable("id") UUID uuid) {
+    @GetMapping("/{uuid}")
+    public ResponseEntity<DealResponseDto> getDeal(@PathVariable UUID uuid) {
         Optional<DealResponseDto> deal = dealService.get(uuid);
         return deal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -42,20 +43,40 @@ public class DealController {
         return ResponseEntity.created(createdDealLocation).body(createdDeal);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DealResponseDto> updateDeal(@PathVariable("id") UUID uuid, @Valid @RequestBody UpdateDealRequestDto deal) {
+    @PutMapping("/{uuid}")
+    public ResponseEntity<DealResponseDto> updateDeal(@PathVariable UUID uuid, @Valid @RequestBody UpdateDealRequestDto deal) {
         return dealService.update(uuid, deal)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDeal(@PathVariable("id") UUID uuid) {
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteDeal(@PathVariable UUID uuid) {
         try {
             dealService.delete(uuid);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/{uuid}/upvote")
+    public ResponseEntity<DealResponseDto> upVoteDeal(@PathVariable UUID uuid) {
+        try {
+            DealResponseDto deal = dealService.voteDeal(uuid, 1);
+            return ResponseEntity.ok(deal);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/{uuid}/downvote")
+    public ResponseEntity<DealResponseDto> downVoteDeal(@PathVariable UUID uuid) {
+        try {
+            DealResponseDto deal = dealService.voteDeal(uuid, -1);
+            return ResponseEntity.ok(deal);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
