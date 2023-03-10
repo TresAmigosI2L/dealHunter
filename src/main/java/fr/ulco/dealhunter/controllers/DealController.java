@@ -12,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -29,8 +28,8 @@ public class DealController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DealResponseDto> getDeal(@PathVariable("id") UUID uuid) {
-        Optional<DealResponseDto> deal = dealService.get(uuid);
-        return deal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        DealResponseDto deal = dealService.get(uuid);
+        return ResponseEntity.ok(deal);
     }
 
     @PostMapping
@@ -44,9 +43,8 @@ public class DealController {
 
     @PutMapping("/{id}")
     public ResponseEntity<DealResponseDto> updateDeal(@PathVariable("id") UUID uuid, @Valid @RequestBody UpdateDealRequestDto deal) {
-        return dealService.update(uuid, deal)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        DealResponseDto updatedDeal = dealService.update(uuid, deal);
+        return ResponseEntity.ok(updatedDeal);
     }
 
     @DeleteMapping("/{id}")
