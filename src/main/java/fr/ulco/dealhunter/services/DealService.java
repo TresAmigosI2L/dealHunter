@@ -1,6 +1,5 @@
 package fr.ulco.dealhunter.services;
 
-import fr.ulco.dealhunter.models.dto.auth.UserResponseDto;
 import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
 import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
