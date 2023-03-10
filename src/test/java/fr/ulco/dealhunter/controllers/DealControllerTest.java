@@ -3,7 +3,6 @@ package fr.ulco.dealhunter.controllers;
 import fr.ulco.dealhunter.models.entities.DealEntity;
 import fr.ulco.dealhunter.repositories.DealRepository;
 import fr.ulco.dealhunter.repositories.UserRepository;
-import fr.ulco.dealhunter.services.AuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
@@ -41,9 +41,6 @@ class DealControllerTest {
 
     @InjectMocks
     private DealController dealController;
-
-    @MockBean
-    private AuthService authService;
 
     @EnableJpaRepositories
     @TestConfiguration
@@ -137,9 +134,6 @@ class DealControllerTest {
     void createDeal() throws Exception{
         DealEntity dealEntity = mockFakeDealEntity();
         when(dealRepository.save(dealEntity)).thenReturn(dealEntity);
-
-        when(authService.getUsernameOfAuthenticatedUser()).thenReturn("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:maxime.vitse@decathlon.com");
-
 
         mockMvc.perform(post("/api/deals").
                         content("{\"title\":\"title\",\"active\":true}")
