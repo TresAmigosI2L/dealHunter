@@ -15,8 +15,10 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Arrays;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.filtering;
 import static java.util.stream.Collectors.joining;
 
 @Service
@@ -61,6 +63,10 @@ public class AuthService {
 
     public String getUsernameOfAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getName();
+
+        return Arrays.stream(authentication.getName().split(":"))
+                .skip(1)
+                .findFirst()
+                .orElse(null);
     }
 }
