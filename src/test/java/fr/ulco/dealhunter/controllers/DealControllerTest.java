@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -134,6 +136,33 @@ class DealControllerTest {
                 .andExpect(jsonPath("active").value(true));
     }
 
+    @Test
+    void testUpVoteDeal() throws Exception {
+        DealEntity dealEntity = mockFakeDealEntity();
+        UUID id = dealEntity.getId();
+        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
+
+        final var request = MockMvcRequestBuilders
+                .put("/api/deals/"+id+"/upvote");
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        assertEquals(1, dealEntity.getVotes());
+    }
+
+    @Test
+    void testDownVoteDeal() throws Exception {
+        DealEntity dealEntity = mockFakeDealEntity();
+        UUID id = dealEntity.getId();
+        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
+
+        final var request = MockMvcRequestBuilders
+                .put("/api/deals/"+id+"/downvote");
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        assertEquals(-1, dealEntity.getVotes());
+    }
 
     private DealEntity mockFakeDealEntity() {
         UUID id = UUID.randomUUID();
