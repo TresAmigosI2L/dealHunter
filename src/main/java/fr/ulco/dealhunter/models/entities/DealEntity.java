@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "deals")
 @Setter
@@ -19,4 +21,9 @@ public class DealEntity extends BaseEntity {
     private boolean active;
     private String author;
     private int votes;
+    private double degrees;
+
+    public DealEntity(UUID randomUUID, String s, String s1, int i) {
+        super();
+    }
 }

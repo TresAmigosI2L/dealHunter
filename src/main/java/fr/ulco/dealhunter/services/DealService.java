@@ -62,4 +62,20 @@ public class DealService {
         }
     }
 
+    // TODO : take in count the down vote in degree calcul
+
+    public DealResponseDto getDealWithDegree(UUID id) {
+        Optional<DealEntity> dealOpt = dealRepository.findById(id);
+        if (dealOpt.isPresent()) {
+            DealEntity deal = dealOpt.get();
+            int votes = deal.getVotes();
+            long totalVotesInDeals = dealRepository.getTotalVotes();
+            double degrees = ((double) votes / totalVotesInDeals) * 100;
+            deal.setDegrees(degrees);
+            return dealMapper.toDto(deal);
+        } else {
+            throw new IllegalArgumentException("Deal not found with UUID: " + id);
+        }
+    }
+
 }

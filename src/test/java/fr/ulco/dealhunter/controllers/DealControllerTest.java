@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -162,6 +163,28 @@ class DealControllerTest {
                 .andExpect(status().isOk());
 
         assertEquals(-1, dealEntity.getVotes());
+    }
+
+    @Test
+    void testGetDealDegree() {
+        List<DealEntity> deals = new ArrayList<>();
+        deals.add(new DealEntity(UUID.randomUUID(), "Deal 1", "Description 1", 2));
+        deals.add(new DealEntity(UUID.randomUUID(), "Deal 2", "Description 2", 5));
+        deals.add(new DealEntity(UUID.randomUUID(), "Deal 3", "Description 3", 1));
+        deals.add(new DealEntity(UUID.randomUUID(), "Deal 4", "Description 4", 3));
+
+        when(dealRepository.findAll()).thenReturn(deals);
+
+        UUID id = deals.get(1).getId();
+        final var request = MockMvcRequestBuilders.get("/api/deals/" + id + "/degree");
+        try {
+            mockMvc.perform(request)
+                    .andExpect(status().isOk())
+                    .andExpect(content().string("50.0"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 
     private DealEntity mockFakeDealEntity() {

@@ -18,4 +18,5 @@ public class DealResponseDto implements Serializable {
     private LocalDateTime updatedAt;
     private String author;
     private int votes;
+    private int degrees;
 }
