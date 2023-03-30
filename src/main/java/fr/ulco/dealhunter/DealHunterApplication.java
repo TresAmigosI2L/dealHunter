@@ -28,8 +28,23 @@ public class DealHunterApplication {
             // create a default account for front demo purpose
             createUser(userService, "axel.lebas@decathlon.com", "xmn");
             authenticatedAs("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:axel.lebas@decathlon.com","xmn");
-            DealResponseDto deal = createFakeDeal(dealService);
-            DealResponseDto deal2 = createFakeDeal(dealService);
+
+            DealResponseDto deal = createFakeDeal(dealService,
+                    "Bose headphones QC45",
+                    "https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-B02.png/_jcr_content/renditions/cq5dam.web.320.320.png",
+                    "https://store.playstation.com/fr-fr/product/EP1018-CUSA00135_00-ARKHAMCOLLECTION",
+                    349.99,
+                    251.06
+            );
+
+            DealResponseDto deal2 = createFakeDeal(
+                    dealService,
+                    "Batman : Arkham Collection sur PS4 (Dématérialisé)",
+                    "https://static-pepper.dealabs.com/threads/raw/R6Ty0/2532769_1/re/300x300/qt/60/2532769_1.jpg",
+                    "https://www.amazon.fr/Bose-Bluetooth-R%C3%A9duction-QuietComfort-Microphone/dp/B098FKXT8L/",
+                    59.99,
+                    11.99
+            );
 
             createUser(userService, "maxime.vitse@decathlon.com", "admin123");
             authenticatedAs("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:maxime.vitse@decathlon.com","admin123");
@@ -55,14 +70,14 @@ public class DealHunterApplication {
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username, password));
     }
 
-    private DealResponseDto createFakeDeal(DealService dealService) {
+    private DealResponseDto createFakeDeal(DealService dealService, String title, String imageUrl, String dealUrl, double originalPrice, double discountPrice) {
         CreateDealRequestDto createDealRequestDto = new CreateDealRequestDto();
-        createDealRequestDto.setTitle("Bose headphones QC45");
+        createDealRequestDto.setTitle(title);
         createDealRequestDto.setActive(true);
-        createDealRequestDto.setImageUrl("https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-B02.png/_jcr_content/renditions/cq5dam.web.320.320.png");
-        createDealRequestDto.setOriginalPrice(349.99);
-        createDealRequestDto.setDiscountPrice(251.06);
-        createDealRequestDto.setDealUrl("https://www.amazon.fr/Bose-Bluetooth-R%C3%A9duction-QuietComfort-Microphone/dp/B098FKXT8L/");
+        createDealRequestDto.setImageUrl(imageUrl);
+        createDealRequestDto.setOriginalPrice(originalPrice);
+        createDealRequestDto.setDiscountPrice(discountPrice);
+        createDealRequestDto.setDealUrl(dealUrl);
 
         DealResponseDto dealResponseDto = dealService.create(createDealRequestDto);
 
