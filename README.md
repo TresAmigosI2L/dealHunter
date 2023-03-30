@@ -29,3 +29,9 @@ newman run src/test/functional/DealHunter_FunctionalTests.json
 ## Integration tests
 
 > WIP
+
+# Architecture N-Tiers
+
+![alt text](./Dealhunter.jpg)
+
+Lien vers l'architecture : [Dealhunter.drawio](https://app.diagrams.net/#G1JV7frwOrxJv80vo7KtEiK9-571BISpfK)
