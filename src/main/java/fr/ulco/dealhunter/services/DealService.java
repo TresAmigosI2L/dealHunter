@@ -76,7 +76,13 @@ public class DealService {
         return dealRepository.findById(uuid).map(dealEntity -> {
             CommentEntity commentEntity = commentMapper.toEntity(addCommentDealRequestDto);
             commentEntity.setAuthor(authService.getUsernameOfAuthenticatedUser());
+
+            dealEntity.getComments().add(commentEntity);
             commentRepository.save(commentEntity);
+
+            commentRepository.save(commentEntity);
+            dealRepository.save(dealEntity);
+
             return commentMapper.toDto(commentEntity);
         }).orElseThrow(() -> new DealNotFoundException(uuid));
     }
