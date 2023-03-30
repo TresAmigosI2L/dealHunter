@@ -625,13 +625,13 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{apiUrl}}/deals/c1954808-6d09-4aae-8665-0d5033c4ac1c/upvote",
+									"raw": "{{apiUrl}}/deals/f57c5833-c5f3-40f0-86f6-c2cf59d6d202/upvote",
 									"host": [
 										"{{apiUrl}}"
 									],
 									"path": [
 										"deals",
-										"c1954808-6d09-4aae-8665-0d5033c4ac1c",
+										"f57c5833-c5f3-40f0-86f6-c2cf59d6d202",
 										"upvote"
 									]
 								}
@@ -661,14 +661,50 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{apiUrl}}/deals/c1954808-6d09-4aae-8665-0d5033c4ac1c/downvote",
+									"raw": "{{apiUrl}}/deals/381ab328-315b-4740-a548-21ab3592c2b5/downvote",
 									"host": [
 										"{{apiUrl}}"
 									],
 									"path": [
 										"deals",
-										"c1954808-6d09-4aae-8665-0d5033c4ac1c",
+										"381ab328-315b-4740-a548-21ab3592c2b5",
 										"downvote"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "degree",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body has error failed to convert String to UUID\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: 1\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}/deals/8ed65475-5f65-46f6-97b7-5b895e385302/degree",
+									"host": [
+										"{{apiUrl}}"
+									],
+									"path": [
+										"deals",
+										"8ed65475-5f65-46f6-97b7-5b895e385302",
+										"degree"
 									]
 								}
 							},
@@ -695,6 +731,57 @@
 							""
 						]
 					}
+				}
+			]
+		},
+		{
+			"name": "Comments deals",
+			"item": [
+				{
+					"name": "Add comment on a deal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(typeof jsonData.createdAt === \"array\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\":\"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}/deals/e8e9be2d-6bc5-4d01-850a-05a23dd16d61/comment",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"deals",
+								"e8e9be2d-6bc5-4d01-850a-05a23dd16d61",
+								"comment"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
