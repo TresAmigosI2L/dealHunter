@@ -1,9 +1,6 @@
 package fr.ulco.dealhunter.controllers;
 
-import fr.ulco.dealhunter.models.dto.deal.CommentDealRequestDto;
-import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
-import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
-import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
+import fr.ulco.dealhunter.models.dto.deal.*;
 import fr.ulco.dealhunter.services.DealService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -90,6 +87,16 @@ public class DealController {
     public ResponseEntity<CommentDealRequestDto> addComment(@PathVariable UUID uuid, @Valid @RequestBody CommentDealRequestDto commentDealRequest) {
         try {
             CommentDealRequestDto commentDealRequestDto = dealService.addComment(uuid, commentDealRequest);
+            return ResponseEntity.ok(commentDealRequestDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/{uuid}/comment")
+    public ResponseEntity<CommentDealRequestDto> updateComment(@PathVariable UUID uuid, @Valid @RequestBody UpdateCommentDealRequestDto commentDealRequest) {
+        try {
+            CommentDealRequestDto commentDealRequestDto = dealService.update(uuid, commentDealRequest);
             return ResponseEntity.ok(commentDealRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

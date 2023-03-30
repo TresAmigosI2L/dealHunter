@@ -1,10 +1,12 @@
 package fr.ulco.dealhunter.models.mappers;
 
 import fr.ulco.dealhunter.models.dto.deal.CommentDealRequestDto;
-import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
+import fr.ulco.dealhunter.models.dto.deal.UpdateCommentDealRequestDto;
 import fr.ulco.dealhunter.models.entities.CommentEntity;
-import fr.ulco.dealhunter.models.entities.DealEntity;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 
 /**
@@ -15,5 +17,8 @@ public interface CommentMapper {
     CommentEntity toEntity(CommentDealRequestDto dto);
 
     CommentDealRequestDto toDto(CommentEntity entity);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntity(UpdateCommentDealRequestDto dto, @MappingTarget CommentEntity entity);
 
 }

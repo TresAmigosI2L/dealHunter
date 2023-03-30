@@ -1,9 +1,6 @@
 package fr.ulco.dealhunter.services;
 
-import fr.ulco.dealhunter.models.dto.deal.CommentDealRequestDto;
-import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
-import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
-import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
+import fr.ulco.dealhunter.models.dto.deal.*;
 import fr.ulco.dealhunter.models.entities.CommentEntity;
 import fr.ulco.dealhunter.models.entities.DealEntity;
 import fr.ulco.dealhunter.models.mappers.CommentMapper;
@@ -73,19 +70,19 @@ public class DealService {
         }
     }
 
-    public Integer getDegreeOfDeal(UUID id) {
-        Optional<DealEntity> dealOpt = dealRepository.findById(id);
+    public Integer getDegreeOfDeal(UUID uuid) {
+        Optional<DealEntity> dealOpt = dealRepository.findById(uuid);
         if (dealOpt.isPresent()) {
             DealEntity deal = dealOpt.get();
             return deal.getVotes();
         } else {
-            throw new IllegalArgumentException("Deal not found with UUID: " + id);
+            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
         }
     }
 
     @Transactional
-    public CommentDealRequestDto addComment(UUID id, CommentDealRequestDto commentDealRequestDto){
-        Optional<DealEntity> dealOpt = dealRepository.findById(id);
+    public CommentDealRequestDto addComment(UUID uuid, CommentDealRequestDto commentDealRequestDto){
+        Optional<DealEntity> dealOpt = dealRepository.findById(uuid);
         if (dealOpt.isPresent()) {
             DealEntity deal = dealOpt.get();
             var comments = deal.getComments();
@@ -97,8 +94,20 @@ public class DealService {
             dealRepository.save(deal);
             return commentMapper.toDto(comment);
         } else {
-            throw new IllegalArgumentException("Deal not found with UUID: " + id);
+            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
         }
     }
 
+    public CommentDealRequestDto update(UUID uuid, UpdateCommentDealRequestDto updateCommentDealRequestDto) {
+        Optional<CommentEntity> commentEntity = commentRepository.findById(uuid);
+        if (commentEntity.isPresent()){
+            CommentEntity comment = commentEntity.get();
+            commentMapper.updateEntity(updateCommentDealRequestDto, comment);
+            commentRepository.save(comment);
+            return commentMapper.toDto(comment);
+
+        } else {
+            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
+        }
+    }
 }
