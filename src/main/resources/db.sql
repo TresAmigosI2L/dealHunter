@@ -1,12 +1,16 @@
 create table deals
 (
-    id         uuid         not null primary key,
-    created_at timestamp(6),
-    updated_at timestamp(6),
-    active     boolean      not null,
-    author     varchar(255),
-    title      varchar(255) not null,
-    votes      integer      not null
+    id             uuid         not null primary key,
+    created_at     timestamp(6),
+    updated_at     timestamp(6),
+    active         boolean      not null,
+    author         varchar(255),
+    deal_url       varchar(255),
+    discount_price double precision,
+    image_url      varchar(255),
+    original_price double precision,
+    title          varchar(255) not null,
+    votes          integer      not null
 );
 
 alter table deals
