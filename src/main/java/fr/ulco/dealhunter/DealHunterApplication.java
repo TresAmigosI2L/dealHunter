@@ -25,7 +25,7 @@ public class DealHunterApplication {
         return args -> {
             // create a default account for front demo purpose
             createAxelUser(userService);
-            authenticatedAs("axel.lebas@decathlon.com","xmn");
+            authenticatedAs("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:axel.lebas@decathlon.com","xmn");
             createFakeDeal(dealService);
 
         };
