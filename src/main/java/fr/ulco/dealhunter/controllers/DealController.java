@@ -79,4 +79,9 @@ public class DealController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @GetMapping("/{uuid}/degree")
+    public ResponseEntity<Integer> getDegree(@PathVariable UUID uuid) {
+        return ResponseEntity.ok(dealService.getDegreeOfDeal(uuid));
+    }
 }

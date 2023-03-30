@@ -62,4 +62,14 @@ public class DealService {
         }
     }
 
+    public Integer getDegreeOfDeal(UUID id) {
+        Optional<DealEntity> dealOpt = dealRepository.findById(id);
+        if (dealOpt.isPresent()) {
+            DealEntity deal = dealOpt.get();
+            return deal.getVotes();
+        } else {
+            throw new IllegalArgumentException("Deal not found with UUID: " + id);
+        }
+    }
+
 }
