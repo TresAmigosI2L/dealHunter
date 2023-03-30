@@ -17,7 +17,7 @@ public class DealHunterApplication {
     @Bean
     CommandLineRunner run() {
         return args -> {
-
+            // create a default account for demo purpose
         };
     }
 }

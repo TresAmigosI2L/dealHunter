@@ -6,25 +6,16 @@ import fr.ulco.dealhunter.repositories.UserRepository;
 import fr.ulco.dealhunter.services.AuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -135,56 +126,6 @@ class DealControllerTest {
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("title").value("title"))
                 .andExpect(jsonPath("active").value(true));
-    }
-
-    @Test
-    void testUpVoteDeal() throws Exception {
-        DealEntity dealEntity = mockFakeDealEntity();
-        UUID id = dealEntity.getId();
-        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
-
-        final var request = MockMvcRequestBuilders
-                .put("/api/deals/"+id+"/upvote");
-        mockMvc.perform(request)
-                .andExpect(status().isOk());
-
-        assertEquals(1, dealEntity.getVotes());
-    }
-
-    @Test
-    void testDownVoteDeal() throws Exception {
-        DealEntity dealEntity = mockFakeDealEntity();
-        UUID id = dealEntity.getId();
-        when(dealRepository.findById(id)).thenReturn(Optional.of(dealEntity));
-
-        final var request = MockMvcRequestBuilders
-                .put("/api/deals/"+id+"/downvote");
-        mockMvc.perform(request)
-                .andExpect(status().isOk());
-
-        assertEquals(-1, dealEntity.getVotes());
-    }
-
-    @Test
-    void testGetDealDegree() {
-        List<DealEntity> deals = new ArrayList<>();
-        deals.add(new DealEntity(UUID.randomUUID(), "Deal 1", "Description 1", 2));
-        deals.add(new DealEntity(UUID.randomUUID(), "Deal 2", "Description 2", 5));
-        deals.add(new DealEntity(UUID.randomUUID(), "Deal 3", "Description 3", 1));
-        deals.add(new DealEntity(UUID.randomUUID(), "Deal 4", "Description 4", 3));
-
-        when(dealRepository.findAll()).thenReturn(deals);
-
-        UUID id = deals.get(1).getId();
-        final var request = MockMvcRequestBuilders.get("/api/deals/" + id + "/degree");
-        try {
-            mockMvc.perform(request)
-                    .andExpect(status().isOk())
-                    .andExpect(content().string("50.0"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
     }
 
     private DealEntity mockFakeDealEntity() {

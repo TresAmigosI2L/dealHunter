@@ -81,8 +81,7 @@ public class DealController {
     }
 
     @GetMapping("/{uuid}/degree")
-    public ResponseEntity<DealResponseDto> getDegree(@PathVariable UUID uuid) {
-        DealResponseDto degree = dealService.getDealWithDegree(uuid);
-        return ResponseEntity.ok(degree);
+    public ResponseEntity<Integer> getDegree(@PathVariable UUID uuid) {
+        return ResponseEntity.ok(dealService.getDegreeOfDeal(uuid));
     }
 }
