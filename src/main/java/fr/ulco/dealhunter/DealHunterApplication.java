@@ -1,5 +1,7 @@
 package fr.ulco.dealhunter;
 
+import fr.ulco.dealhunter.models.dto.auth.CreateUserRequestDto;
+import fr.ulco.dealhunter.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,9 +17,14 @@ public class DealHunterApplication {
 
     //FAKE DATA FOR BDD : you could put service in params
     @Bean
-    CommandLineRunner run() {
+    CommandLineRunner run(UserService userService) {
         return args -> {
-            // create a default account for demo purpose
+            // create a default account for front demo purpose
+            CreateUserRequestDto createUserRequestDto = new CreateUserRequestDto();
+            createUserRequestDto.setUsername("axel.lebas@decathlon.com");
+            createUserRequestDto.setPassword("xmn");
+            createUserRequestDto.setConfirmPassword("xmn");
+            userService.create(createUserRequestDto);
         };
     }
 }
