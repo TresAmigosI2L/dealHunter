@@ -15,4 +15,7 @@ public class CreateDealRequestDto implements Serializable {
     @NotNull(message = "active is required")
     private boolean active;
     private String imageUrl;
+    private Double originalPrice;
+    private Double discountPrice;
+    private String dealUrl;
 }

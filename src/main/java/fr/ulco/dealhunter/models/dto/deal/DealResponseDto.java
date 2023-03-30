@@ -19,4 +19,7 @@ public class DealResponseDto implements Serializable {
     private String author;
     private String imageUrl;
     private int votes;
+    private Double originalPrice;
+    private Double discountPrice;
+    private String dealUrl;
 }
