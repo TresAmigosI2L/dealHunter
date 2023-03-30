@@ -10,6 +10,7 @@ import fr.ulco.dealhunter.models.mappers.CommentMapper;
 import fr.ulco.dealhunter.models.mappers.DealMapper;
 import fr.ulco.dealhunter.repositories.CommentRepository;
 import fr.ulco.dealhunter.repositories.DealRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,7 @@ public class DealService {
         dealRepository.deleteById(id);
     }
 
+    @Transactional
     public DealResponseDto voteDeal(UUID uuid, int voteDirection) {
         Optional<DealEntity> dealOpt = dealRepository.findById(uuid);
         if (dealOpt.isPresent()) {
@@ -81,6 +83,7 @@ public class DealService {
         }
     }
 
+    @Transactional
     public CommentDealRequestDto addComment(UUID id, CommentDealRequestDto commentDealRequestDto){
         Optional<DealEntity> dealOpt = dealRepository.findById(id);
         if (dealOpt.isPresent()) {
