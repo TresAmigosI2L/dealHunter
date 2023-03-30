@@ -1,7 +1,7 @@
 package fr.ulco.dealhunter;
 
 import fr.ulco.dealhunter.models.dto.auth.CreateUserRequestDto;
-import fr.ulco.dealhunter.models.dto.deal.CommentDealRequestDto;
+import fr.ulco.dealhunter.models.dto.deal.AddCommentDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
 import fr.ulco.dealhunter.services.DealService;
@@ -55,7 +55,7 @@ public class DealHunterApplication {
     }
 
     private void addXFakeVotes(DealService dealService, DealResponseDto deal, int numberVotes) {
-        dealService.voteDeal(deal.getId(),numberVotes);
+        dealService.voteDeal(deal.getId(), numberVotes);
     }
 
     private static void createUser(UserService userService, String username, String password) {
@@ -85,8 +85,8 @@ public class DealHunterApplication {
     }
 
     private static void createFakeComment(DealService dealService, DealResponseDto deal) {
-        CommentDealRequestDto commentDealRequestDto = new CommentDealRequestDto();
-        commentDealRequestDto.setMessage("J'ai le 700, il a l'air bien aussi.");
-        dealService.addComment(deal.getId(), commentDealRequestDto);
+        AddCommentDealRequestDto addCommentDealRequestDto = new AddCommentDealRequestDto();
+        addCommentDealRequestDto.setMessage("J'ai le 700, il a l'air bien aussi.");
+        dealService.addComment(deal.getId(), addCommentDealRequestDto);
     }
 }

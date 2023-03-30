@@ -1,9 +1,12 @@
 package fr.ulco.dealhunter.services;
 
 import fr.ulco.dealhunter.models.dto.auth.AuthRequestDto;
+import fr.ulco.dealhunter.models.dto.auth.UserResponseDto;
 import fr.ulco.dealhunter.models.entities.UserEntity;
+import fr.ulco.dealhunter.models.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +27,7 @@ import static java.util.stream.Collectors.joining;
 public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtEncoder jwtEncoder;
+    private final UserMapper userMapper;
 
     public String generateToken(AuthRequestDto authRequest) {
         var authentication = authenticationManager.authenticate(
@@ -52,11 +56,12 @@ public class AuthService {
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
-    public UserEntity authenticateUser(AuthRequestDto authRequest) {
+    public UserResponseDto authenticateUser(AuthRequestDto authRequest) throws BadCredentialsException {
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
         );
-        return (UserEntity) authentication.getPrincipal();
+        var userEntity = (UserEntity) authentication.getPrincipal();
+        return userMapper.toOutputDto(userEntity);
     }
 
     public String getUsernameOfAuthenticatedUser() {

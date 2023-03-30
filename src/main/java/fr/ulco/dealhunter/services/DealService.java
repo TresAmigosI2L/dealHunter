@@ -1,5 +1,6 @@
 package fr.ulco.dealhunter.services;
 
+import fr.ulco.dealhunter.exceptions.DealNotFoundException;
 import fr.ulco.dealhunter.models.dto.deal.*;
 import fr.ulco.dealhunter.models.entities.CommentEntity;
 import fr.ulco.dealhunter.models.entities.DealEntity;
@@ -13,7 +14,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,17 +35,18 @@ public class DealService {
         return dealMapper.toDto(dealEntity);
     }
 
-    public Optional<DealResponseDto> update(UUID uuid, UpdateDealRequestDto newDeal) {
+    public DealResponseDto updateComment(UUID uuid, UpdateDealRequestDto newDeal) {
         return dealRepository.findById(uuid).map(dealEntity -> {
             dealMapper.updateEntity(newDeal, dealEntity);
             dealRepository.save(dealEntity);
             return dealMapper.toDto(dealEntity);
-        });
+        }).orElseThrow(() -> new DealNotFoundException(uuid));
     }
 
-    public Optional<DealResponseDto> get(UUID id) {
-        return dealRepository.findById(id)
-                .map(dealMapper::toDto);
+    public DealResponseDto get(UUID uuid) {
+        return dealRepository.findById(uuid)
+                .map(dealMapper::toDto)
+                .orElseThrow(() -> new DealNotFoundException(uuid));
     }
 
     public List<DealResponseDto> getAll() {
@@ -57,57 +58,33 @@ public class DealService {
         dealRepository.deleteById(id);
     }
 
-    @Transactional
     public DealResponseDto voteDeal(UUID uuid, int voteDirection) {
-        Optional<DealEntity> dealOpt = dealRepository.findById(uuid);
-        if (dealOpt.isPresent()) {
-            DealEntity deal = dealOpt.get();
-            deal.setVotes(deal.getVotes() + voteDirection);
-            dealRepository.save(deal);
-            return dealMapper.toDto(deal);
-        } else {
-            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
-        }
+        return dealRepository.findById(uuid).map(dealEntity -> {
+            dealEntity.setVotes(dealEntity.getVotes() + voteDirection);
+            dealRepository.save(dealEntity);
+            return dealMapper.toDto(dealEntity);
+        }).orElseThrow(() -> new DealNotFoundException(uuid));
     }
 
     public Integer getDegreeOfDeal(UUID uuid) {
-        Optional<DealEntity> dealOpt = dealRepository.findById(uuid);
-        if (dealOpt.isPresent()) {
-            DealEntity deal = dealOpt.get();
-            return deal.getVotes();
-        } else {
-            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
-        }
+        return dealRepository.findById(uuid).map(DealEntity::getVotes).orElseThrow(() -> new DealNotFoundException(uuid));
     }
 
     @Transactional
-    public CommentDealRequestDto addComment(UUID uuid, CommentDealRequestDto commentDealRequestDto){
-        Optional<DealEntity> dealOpt = dealRepository.findById(uuid);
-        if (dealOpt.isPresent()) {
-            DealEntity deal = dealOpt.get();
-            var comments = deal.getComments();
-            CommentEntity comment = commentMapper.toEntity(commentDealRequestDto);
-            comment.setAuthor(authService.getUsernameOfAuthenticatedUser());
-            comments.add(comment);
-            deal.setComments(comments);
-            commentRepository.save(comment);
-            dealRepository.save(deal);
-            return commentMapper.toDto(comment);
-        } else {
-            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
-        }
+    public AddCommentDealRequestDto addComment(UUID uuid, AddCommentDealRequestDto addCommentDealRequestDto){
+        return dealRepository.findById(uuid).map(dealEntity -> {
+            CommentEntity commentEntity = commentMapper.toEntity(addCommentDealRequestDto);
+            commentEntity.setAuthor(authService.getUsernameOfAuthenticatedUser());
+            commentRepository.save(commentEntity);
+            return commentMapper.toDto(commentEntity);
+        }).orElseThrow(() -> new DealNotFoundException(uuid));
     }
 
-    public CommentDealRequestDto update(UUID uuid, UpdateCommentDealRequestDto updateCommentDealRequestDto) {
-        Optional<CommentEntity> commentEntity = commentRepository.findById(uuid);
-        if (commentEntity.isPresent()){
-            CommentEntity comment = commentEntity.get();
-            commentMapper.updateEntity(updateCommentDealRequestDto, comment);
-            commentRepository.save(comment);
-            return commentMapper.toDto(comment);
-
-        } else {
-            throw new IllegalArgumentException("Deal not found with UUID: " + uuid);
-        }
+    public AddCommentDealRequestDto updateComment(UUID uuid, UpdateCommentDealRequestDto updateCommentDealRequestDto) {
+        return commentRepository.findById(uuid).map(commentEntity -> {
+            commentMapper.updateEntity(updateCommentDealRequestDto, commentEntity);
+            commentRepository.save(commentEntity);
+            return commentMapper.toDto(commentEntity);
+        }).orElseThrow(() -> new DealNotFoundException(uuid));
     }
 }

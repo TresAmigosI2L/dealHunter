@@ -26,11 +26,9 @@ public class AuthController {
     public ResponseEntity<UserResponseDto> login(@RequestBody @Valid AuthRequestDto authRequest) {
         var token = authService.generateToken(authRequest);
         var user = authService.authenticateUser(authRequest);
-        return userService.get(user.getId())
-                .map(userResponseDto -> ResponseEntity.ok()
-                        .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token))
-                        .body(userResponseDto))
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, format("Bearer %s", token))
+                .body(user);
     }
 
     @PostMapping("/register")

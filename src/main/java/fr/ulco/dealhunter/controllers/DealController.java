@@ -11,7 +11,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -28,8 +27,8 @@ public class DealController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<DealResponseDto> getDeal(@PathVariable UUID uuid) {
-        Optional<DealResponseDto> deal = dealService.get(uuid);
-        return deal.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        DealResponseDto deal = dealService.get(uuid);
+        return ResponseEntity.ok(deal);
     }
 
     @PostMapping
@@ -43,9 +42,8 @@ public class DealController {
 
     @PutMapping("/{uuid}")
     public ResponseEntity<DealResponseDto> updateDeal(@PathVariable UUID uuid, @Valid @RequestBody UpdateDealRequestDto deal) {
-        return dealService.update(uuid, deal)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        DealResponseDto updatedDeal = dealService.updateComment(uuid, deal);
+        return ResponseEntity.ok(updatedDeal);
     }
 
     @DeleteMapping("/{uuid}")
@@ -60,22 +58,14 @@ public class DealController {
 
     @PutMapping("/{uuid}/upvote")
     public ResponseEntity<DealResponseDto> upVoteDeal(@PathVariable UUID uuid) {
-        try {
-            DealResponseDto deal = dealService.voteDeal(uuid, 1);
-            return ResponseEntity.ok(deal);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        DealResponseDto deal = dealService.voteDeal(uuid, 1);
+        return ResponseEntity.ok(deal);
     }
 
     @PutMapping("/{uuid}/downvote")
     public ResponseEntity<DealResponseDto> downVoteDeal(@PathVariable UUID uuid) {
-        try {
-            DealResponseDto deal = dealService.voteDeal(uuid, -1);
-            return ResponseEntity.ok(deal);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        DealResponseDto deal = dealService.voteDeal(uuid, -1);
+        return ResponseEntity.ok(deal);
     }
 
     @GetMapping("/{uuid}/degree")
@@ -84,20 +74,20 @@ public class DealController {
     }
 
     @PostMapping("/{uuid}/comment")
-    public ResponseEntity<CommentDealRequestDto> addComment(@PathVariable UUID uuid, @Valid @RequestBody CommentDealRequestDto commentDealRequest) {
+    public ResponseEntity<AddCommentDealRequestDto> addComment(@PathVariable UUID uuid, @Valid @RequestBody AddCommentDealRequestDto commentDealRequest) {
         try {
-            CommentDealRequestDto commentDealRequestDto = dealService.addComment(uuid, commentDealRequest);
-            return ResponseEntity.ok(commentDealRequestDto);
+            AddCommentDealRequestDto addCommentDealRequestDto = dealService.addComment(uuid, commentDealRequest);
+            return ResponseEntity.ok(addCommentDealRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @PutMapping("/{uuid}/comment")
-    public ResponseEntity<CommentDealRequestDto> updateComment(@PathVariable UUID uuid, @Valid @RequestBody UpdateCommentDealRequestDto commentDealRequest) {
+    public ResponseEntity<AddCommentDealRequestDto> updateComment(@PathVariable UUID uuid, @Valid @RequestBody UpdateCommentDealRequestDto commentDealRequest) {
         try {
-            CommentDealRequestDto commentDealRequestDto = dealService.update(uuid, commentDealRequest);
-            return ResponseEntity.ok(commentDealRequestDto);
+            AddCommentDealRequestDto addCommentDealRequestDto = dealService.updateComment(uuid, commentDealRequest);
+            return ResponseEntity.ok(addCommentDealRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

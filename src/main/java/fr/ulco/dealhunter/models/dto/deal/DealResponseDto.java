@@ -23,5 +23,5 @@ public class DealResponseDto implements Serializable {
     private Double originalPrice;
     private Double discountPrice;
     private String dealUrl;
-    private Set<CommentDealRequestDto> comments;
+    private Set<AddCommentDealRequestDto> comments;
 }

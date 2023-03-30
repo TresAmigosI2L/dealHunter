@@ -10,7 +10,7 @@ import java.util.UUID;
  * A DTO to create a {@link fr.ulco.dealhunter.models.entities.CommentEntity} entity
  */
 @Data
-public class CommentDealRequestDto implements Serializable {
+public class AddCommentDealRequestDto implements Serializable {
     private String author;
 
     @NotNull
