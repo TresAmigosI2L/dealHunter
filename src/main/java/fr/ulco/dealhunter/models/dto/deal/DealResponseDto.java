@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -22,4 +23,5 @@ public class DealResponseDto implements Serializable {
     private Double originalPrice;
     private Double discountPrice;
     private String dealUrl;
+    private Set<CommentDealRequestDto> comments;
 }

@@ -11,4 +11,8 @@ import java.io.Serializable;
 public class UpdateDealRequestDto implements Serializable {
     private String title;
     private boolean isActive;
+    private String imageUrl;
+    private Double originalPrice;
+    private Double discountPrice;
+    private String dealUrl;
 }

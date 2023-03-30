@@ -1,9 +1,14 @@
 package fr.ulco.dealhunter.models.entities;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "deals")
@@ -22,4 +27,7 @@ public class DealEntity extends BaseEntity {
     private Double originalPrice;
     private Double discountPrice;
     private String dealUrl;
+
+    @ElementCollection
+    private Set<CommentEntity> comments = new HashSet<>();
 }

@@ -1,5 +1,6 @@
 package fr.ulco.dealhunter.controllers;
 
+import fr.ulco.dealhunter.models.dto.deal.CommentDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
 import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
@@ -83,5 +84,15 @@ public class DealController {
     @GetMapping("/{uuid}/degree")
     public ResponseEntity<Integer> getDegree(@PathVariable UUID uuid) {
         return ResponseEntity.ok(dealService.getDegreeOfDeal(uuid));
+    }
+
+    @PostMapping("/{uuid}/comment")
+    public ResponseEntity<CommentDealRequestDto> addComment(@PathVariable UUID uuid, @Valid @RequestBody CommentDealRequestDto commentDealRequest) {
+        try {
+            CommentDealRequestDto commentDealRequestDto = dealService.addComment(uuid, commentDealRequest);
+            return ResponseEntity.ok(commentDealRequestDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

@@ -1,10 +1,14 @@
 package fr.ulco.dealhunter.services;
 
+import fr.ulco.dealhunter.models.dto.deal.CommentDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.CreateDealRequestDto;
 import fr.ulco.dealhunter.models.dto.deal.DealResponseDto;
 import fr.ulco.dealhunter.models.dto.deal.UpdateDealRequestDto;
+import fr.ulco.dealhunter.models.entities.CommentEntity;
 import fr.ulco.dealhunter.models.entities.DealEntity;
+import fr.ulco.dealhunter.models.mappers.CommentMapper;
 import fr.ulco.dealhunter.models.mappers.DealMapper;
+import fr.ulco.dealhunter.repositories.CommentRepository;
 import fr.ulco.dealhunter.repositories.DealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,7 +22,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DealService {
     private final DealRepository dealRepository;
+    private final CommentRepository commentRepository;
     private final DealMapper dealMapper;
+    private final CommentMapper commentMapper;
     private final AuthService authService;
 
     public DealResponseDto create(CreateDealRequestDto deal) {
@@ -70,6 +76,23 @@ public class DealService {
         if (dealOpt.isPresent()) {
             DealEntity deal = dealOpt.get();
             return deal.getVotes();
+        } else {
+            throw new IllegalArgumentException("Deal not found with UUID: " + id);
+        }
+    }
+
+    public CommentDealRequestDto addComment(UUID id, CommentDealRequestDto commentDealRequestDto){
+        Optional<DealEntity> dealOpt = dealRepository.findById(id);
+        if (dealOpt.isPresent()) {
+            DealEntity deal = dealOpt.get();
+            var comments = deal.getComments();
+            CommentEntity comment = commentMapper.toEntity(commentDealRequestDto);
+            comment.setAuthor(authService.getUsernameOfAuthenticatedUser());
+            comments.add(comment);
+            deal.setComments(comments);
+            commentRepository.save(comment);
+            dealRepository.save(deal);
+            return commentMapper.toDto(comment);
         } else {
             throw new IllegalArgumentException("Deal not found with UUID: " + id);
         }
