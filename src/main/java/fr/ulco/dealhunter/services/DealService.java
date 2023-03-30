@@ -58,6 +58,7 @@ public class DealService {
         dealRepository.deleteById(id);
     }
 
+    @Transactional
     public DealResponseDto voteDeal(UUID uuid, int voteDirection) {
         return dealRepository.findById(uuid).map(dealEntity -> {
             dealEntity.setVotes(dealEntity.getVotes() + voteDirection);
