@@ -129,7 +129,6 @@ class DealControllerTest {
                 .andExpect(jsonPath("active").value(true));
     }
 
-
     @Test
     void testUpVoteDeal() throws Exception {
         DealEntity dealEntity = mockFakeDealEntity();

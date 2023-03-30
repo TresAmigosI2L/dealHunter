@@ -14,4 +14,5 @@ public class CreateDealRequestDto implements Serializable {
     private String title;
     @NotNull(message = "active is required")
     private boolean active;
+    private String imageUrl;
 }

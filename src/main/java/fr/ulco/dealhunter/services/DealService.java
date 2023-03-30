@@ -24,6 +24,9 @@ public class DealService {
     public DealResponseDto create(CreateDealRequestDto deal) {
         DealEntity dealEntity = dealMapper.toEntity(deal);
         dealEntity.setAuthor(authService.getUsernameOfAuthenticatedUser());
+        if (dealEntity.getImageUrl() == null){
+            dealEntity.setImageUrl("https://caer.univ-amu.fr/wp-content/uploads/default-placeholder.png");
+        }
         dealRepository.save(dealEntity);
         return dealMapper.toDto(dealEntity);
     }

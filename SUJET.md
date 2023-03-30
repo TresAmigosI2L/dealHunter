@@ -14,19 +14,17 @@ Le minimum:
 - [X] Le modèle de la base lié grâce à Hibernate et Spring Data.
 - [X] Le projet devra compiler pour java 11+ à l'aide de Maven.
 - [X] Une authentification en Basic avec Spring Sécurité. => on a poussé vers une OAUTH2 avec Bearer
-- [ ] Au moins deux endpoints correspondant à des besoins utilisateurs.
-- [ ] Une API utilisant JSON et Spring REST.
+- [X] Au moins deux endpoints correspondant à des besoins utilisateurs.
+- [X] Une API utilisant JSON et Spring REST.
 - [ ] La partie front qui appelle l'API.
 
-Ce qui peut être ajouté:
-
-- [ ] Une suite de tests Spring.
-- [ ] Une web socket.
-- [ ] Une CI avec Jenkins ou Git Action qui compile le code et lance les tests.
-- [ ] Mise en place d'un cache guava.
 
 BONUS:
 
+- [X] Une suite de tests Spring.
+- [ ] Une web socket.
+- [ ] Une CI avec Jenkins ou Git Action qui compile le code et lance les tests.
+- [ ] Mise en place d'un cache guava.
 - [ ] La CD est déployée et hostée.
 
 ### Quelques rappels

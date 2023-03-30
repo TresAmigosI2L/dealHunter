@@ -35,6 +35,7 @@ public class DealHunterApplication {
         CreateDealRequestDto createDealRequestDto = new CreateDealRequestDto();
         createDealRequestDto.setTitle("Bose headphones QC45");
         createDealRequestDto.setActive(true);
+        createDealRequestDto.setImageUrl("https://assets.bose.com/content/dam/Bose_DAM/Web/consumer_electronics/global/products/headphones/qc45/product_silo_images/QC45_PDP_Ecom-Gallery-B02.png/_jcr_content/renditions/cq5dam.web.320.320.png");
         dealService.create(createDealRequestDto);
     }
 

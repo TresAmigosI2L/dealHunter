@@ -20,4 +20,5 @@ public class DealEntity extends BaseEntity {
     private boolean active;
     private String author;
     private int votes;
+    private String imageUrl;
 }

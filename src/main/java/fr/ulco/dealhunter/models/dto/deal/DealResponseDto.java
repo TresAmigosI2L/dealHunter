@@ -17,5 +17,6 @@ public class DealResponseDto implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String author;
+    private String imageUrl;
     private int votes;
 }

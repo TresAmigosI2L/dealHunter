@@ -30,8 +30,11 @@ newman run src/test/functional/DealHunter_FunctionalTests.json
 
 > WIP
 
-# Architecture N-Tiers
+# Schema architecture N-Tiers
 
-![alt text](./Dealhunter.jpg)
+![alt text](docs/schema_archi_n_tiers.jpg)
 
 Lien vers l'architecture : [Dealhunter.drawio](https://app.diagrams.net/#G1JV7frwOrxJv80vo7KtEiK9-571BISpfK)
+
+# Schema DB
+![img.png](docs/diagramm_db.png)
