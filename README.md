@@ -22,6 +22,13 @@
 newman run src/test/functional/DealHunter_FunctionalTests.json
 ```
 
+## Demo account
+```
+{
+    "username":"axel.lebas@decathlon.com",
+    "password":"xmn"
+}
+```
 ## Unit tests
 
 > WIP

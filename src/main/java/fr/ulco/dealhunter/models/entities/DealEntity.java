@@ -5,8 +5,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.UUID;
-
 @Entity
 @Table(name = "deals")
 @Setter
@@ -21,4 +19,7 @@ public class DealEntity extends BaseEntity {
     private String author;
     private int votes;
     private String imageUrl;
+    private Double originalPrice;
+    private Double discountPrice;
+    private String dealUrl;
 }
