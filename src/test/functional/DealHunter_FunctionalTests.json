@@ -782,6 +782,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update comment on a deal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(typeof jsonData.createdAt === \"array\")",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\":\"test edit\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{apiUrl}}/deals/63e6812e-7852-4083-a9b1-2042045fde19/comment",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"deals",
+								"63e6812e-7852-4083-a9b1-2042045fde19",
+								"comment"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
