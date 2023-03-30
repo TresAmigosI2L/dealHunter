@@ -2,9 +2,8 @@ package fr.ulco.dealhunter.models.dto.deal;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NonNull;
-
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * A DTO to create a {@link fr.ulco.dealhunter.models.entities.CommentEntity} entity
@@ -15,4 +14,7 @@ public class CommentDealRequestDto implements Serializable {
 
     @NotNull
     private String message;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
