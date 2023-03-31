@@ -10,7 +10,7 @@ pipeline {
             steps {
                 sh 'echo $MAVEN_HOME'
                 sh 'echo $JAVA_HOME'
-                sh 'java --version'
+                sh 'echo $(java --version)'
                 sh 'mvn -B -DskipTests clean package'
             }
         }
