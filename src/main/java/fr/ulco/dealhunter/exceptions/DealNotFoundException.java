@@ -1,6 +1,7 @@
 package fr.ulco.dealhunter.exceptions;
 
 import java.util.UUID;
+
 import static java.lang.String.format;
 
 public class DealNotFoundException extends RuntimeException {

@@ -14,11 +14,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class DealHunterApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DealHunterApplication.class, args);
+    }
+
+    private static void createUser(UserService userService, String username, String password) {
+        CreateUserRequestDto createUserRequestDto = new CreateUserRequestDto();
+        createUserRequestDto.setUsername(username);
+        createUserRequestDto.setPassword(password);
+        createUserRequestDto.setConfirmPassword(password);
+        userService.create(createUserRequestDto);
+    }
+
+    private static void createFakeComment(DealService dealService, DealResponseDto deal) {
+        AddCommentDealRequestDto addCommentDealRequestDto = new AddCommentDealRequestDto();
+        addCommentDealRequestDto.setMessage("J'ai le 700, il a l'air bien aussi.");
+        dealService.addComment(deal.getId(), addCommentDealRequestDto);
     }
 
     //FAKE DATA FOR BDD : you could put service in params
@@ -27,7 +41,7 @@ public class DealHunterApplication {
         return args -> {
             // create a default account for front demo purpose
             createUser(userService, "axel.lebas@decathlon.com", "xmn");
-            authenticatedAs("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:axel.lebas@decathlon.com","xmn");
+            authenticatedAs("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:axel.lebas@decathlon.com", "xmn");
 
             DealResponseDto deal = createFakeDeal(dealService,
                     "Bose headphones QC45",
@@ -47,7 +61,7 @@ public class DealHunterApplication {
             );
 
             createUser(userService, "maxime.vitse@decathlon.com", "admin123");
-            authenticatedAs("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:maxime.vitse@decathlon.com","admin123");
+            authenticatedAs("28aeb0e7-2f09-42e6-b44f-6009e6baeb0c:maxime.vitse@decathlon.com", "admin123");
 
             createFakeComment(dealService, deal);
             addXFakeVotes(dealService, deal, 10);
@@ -56,14 +70,6 @@ public class DealHunterApplication {
 
     private void addXFakeVotes(DealService dealService, DealResponseDto deal, int numberVotes) {
         dealService.voteDeal(deal.getId(), numberVotes);
-    }
-
-    private static void createUser(UserService userService, String username, String password) {
-        CreateUserRequestDto createUserRequestDto = new CreateUserRequestDto();
-        createUserRequestDto.setUsername(username);
-        createUserRequestDto.setPassword(password);
-        createUserRequestDto.setConfirmPassword(password);
-        userService.create(createUserRequestDto);
     }
 
     private void authenticatedAs(String username, String password) {
@@ -82,11 +88,5 @@ public class DealHunterApplication {
         DealResponseDto dealResponseDto = dealService.create(createDealRequestDto);
 
         return dealResponseDto;
-    }
-
-    private static void createFakeComment(DealService dealService, DealResponseDto deal) {
-        AddCommentDealRequestDto addCommentDealRequestDto = new AddCommentDealRequestDto();
-        addCommentDealRequestDto.setMessage("J'ai le 700, il a l'air bien aussi.");
-        dealService.addComment(deal.getId(), addCommentDealRequestDto);
     }
 }

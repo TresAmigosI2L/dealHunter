@@ -1,5 +1,6 @@
 package fr.ulco.dealhunter.services;
 
+import fr.ulco.dealhunter.exceptions.CommentNotFoundException;
 import fr.ulco.dealhunter.exceptions.DealNotFoundException;
 import fr.ulco.dealhunter.models.dto.deal.*;
 import fr.ulco.dealhunter.models.entities.CommentEntity;
@@ -28,7 +29,7 @@ public class DealService {
     public DealResponseDto create(CreateDealRequestDto deal) {
         DealEntity dealEntity = dealMapper.toEntity(deal);
         dealEntity.setAuthor(authService.getUsernameOfAuthenticatedUser());
-        if (dealEntity.getImageUrl() == null){
+        if (dealEntity.getImageUrl() == null) {
             dealEntity.setImageUrl("https://caer.univ-amu.fr/wp-content/uploads/default-placeholder.png");
         }
         dealRepository.save(dealEntity);
@@ -72,13 +73,12 @@ public class DealService {
     }
 
     @Transactional
-    public AddCommentDealRequestDto addComment(UUID uuid, AddCommentDealRequestDto addCommentDealRequestDto){
+    public AddCommentDealRequestDto addComment(UUID uuid, AddCommentDealRequestDto addCommentDealRequestDto) {
         return dealRepository.findById(uuid).map(dealEntity -> {
             CommentEntity commentEntity = commentMapper.toEntity(addCommentDealRequestDto);
             commentEntity.setAuthor(authService.getUsernameOfAuthenticatedUser());
 
             dealEntity.getComments().add(commentEntity);
-            commentRepository.save(commentEntity);
 
             commentRepository.save(commentEntity);
             dealRepository.save(dealEntity);
@@ -92,6 +92,6 @@ public class DealService {
             commentMapper.updateEntity(updateCommentDealRequestDto, commentEntity);
             commentRepository.save(commentEntity);
             return commentMapper.toDto(commentEntity);
-        }).orElseThrow(() -> new DealNotFoundException(uuid));
+        }).orElseThrow(() -> new CommentNotFoundException(uuid));
     }
 }

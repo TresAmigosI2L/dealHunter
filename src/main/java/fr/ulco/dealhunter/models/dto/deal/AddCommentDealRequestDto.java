@@ -2,6 +2,7 @@ package fr.ulco.dealhunter.models.dto.deal;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -11,7 +11,8 @@ import java.io.Serializable;
  */
 @Data
 public class AuthRequestDto implements Serializable {
-    @NotNull @Email
+    @NotNull
+    @Email
     private String username;
     @NotNull
     private String password;

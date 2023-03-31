@@ -3,6 +3,7 @@ package fr.ulco.dealhunter.models.dto.auth;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Set;
 
