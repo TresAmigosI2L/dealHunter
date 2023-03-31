@@ -47,7 +47,7 @@ http://localhost:5173/login
 
 # Schema architecture N-Tiers
 
-![alt text](docs/schema_archi_n_tiers.jpg)
+![alt text](docs/schema_archi_n_tiers.png)
 
 Lien vers l'architecture : [Dealhunter.drawio](https://app.diagrams.net/#G1JV7frwOrxJv80vo7KtEiK9-571BISpfK)
 
