@@ -11,6 +11,7 @@ import fr.ulco.dealhunter.repositories.CommentRepository;
 import fr.ulco.dealhunter.repositories.DealRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DealService {
     private final DealRepository dealRepository;
     private final CommentRepository commentRepository;
@@ -33,6 +35,7 @@ public class DealService {
             dealEntity.setImageUrl("https://caer.univ-amu.fr/wp-content/uploads/default-placeholder.png");
         }
         dealRepository.save(dealEntity);
+        log.debug("Deal created: {}", dealEntity);
         return dealMapper.toDto(dealEntity);
     }
 

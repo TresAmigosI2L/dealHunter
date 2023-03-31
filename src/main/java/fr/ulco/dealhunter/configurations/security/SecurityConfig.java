@@ -1,4 +1,4 @@
-package fr.ulco.dealhunter.security;
+package fr.ulco.dealhunter.configurations.security;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;

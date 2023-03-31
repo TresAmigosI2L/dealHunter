@@ -8,6 +8,7 @@ import fr.ulco.dealhunter.models.entities.UserEntity;
 import fr.ulco.dealhunter.models.mappers.UserMapper;
 import fr.ulco.dealhunter.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +19,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -26,6 +28,7 @@ public class UserService implements UserDetailsService {
 
     public UserResponseDto create(CreateUserRequestDto newUserRequest) throws UserAlreadyExistsException, PasswordMismatchException {
         if (userRepository.findByUsername(newUserRequest.getUsername()).isPresent()) {
+            log.error(format("A user tried to register as %s, but the user already exists", newUserRequest.getUsername()));
             throw new UserAlreadyExistsException(newUserRequest.getUsername());
         }
         if (!newUserRequest.getPassword().equals(newUserRequest.getConfirmPassword())) {
