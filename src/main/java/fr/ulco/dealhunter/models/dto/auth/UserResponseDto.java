@@ -11,8 +11,8 @@ import java.util.UUID;
  */
 @Data
 public class UserResponseDto implements Serializable {
-    UUID id;
-    String username;
+    private UUID id;
+    private String username;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

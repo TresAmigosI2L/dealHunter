@@ -29,6 +29,7 @@ https://github.com/TresAmigosI2L/dh-front
 http://localhost:5173/login
 
 ![img.png](docs/front_screen.png)
+![img.png](front_screen2/img.png)
 
 ## Demo account
 ```

@@ -51,7 +51,7 @@ public class DealHunterApplication {
                     251.06
             );
 
-            DealResponseDto deal2 = createFakeDeal(
+            createFakeDeal(
                     dealService,
                     "Batman : Arkham Collection sur PS4 (Dématérialisé)",
                     "https://static-pepper.dealabs.com/threads/raw/R6Ty0/2532769_1/re/300x300/qt/60/2532769_1.jpg",
@@ -85,8 +85,6 @@ public class DealHunterApplication {
         createDealRequestDto.setDiscountPrice(discountPrice);
         createDealRequestDto.setDealUrl(dealUrl);
 
-        DealResponseDto dealResponseDto = dealService.create(createDealRequestDto);
-
-        return dealResponseDto;
+        return dealService.create(createDealRequestDto);
     }
 }

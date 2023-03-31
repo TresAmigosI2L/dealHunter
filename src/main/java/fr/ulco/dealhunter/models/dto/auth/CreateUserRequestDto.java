@@ -13,13 +13,13 @@ import java.util.Set;
 @Data
 public class CreateUserRequestDto implements Serializable {
     @NotBlank @Email
-    String username;
+    private String username;
 
     @NotBlank
-    String password;
+    private String password;
 
     @NotBlank
-    String confirmPassword;
+    private String confirmPassword;
 
-    Set<String> authorities;
+    private Set<String> authorities;
 }
