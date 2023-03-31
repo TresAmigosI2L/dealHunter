@@ -39,11 +39,11 @@ http://localhost:5173/login
 ```
 ## Unit tests
 
-> WIP
+> See DealControllerTest
 
-## Integration tests
+## Functionnal tests
 
-> WIP
+> See DealHunter_FunctionnalTests.json
 
 # Schema architecture N-Tiers
 
@@ -52,4 +52,4 @@ http://localhost:5173/login
 Lien vers l'architecture : [Dealhunter.drawio](https://app.diagrams.net/#G1JV7frwOrxJv80vo7KtEiK9-571BISpfK)
 
 # Schema DB
-![img.png](docs/diagramm_db.png)
+![img.png](docs/diagram_db.png)
