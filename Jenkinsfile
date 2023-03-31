@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'maven-3.9.1'
-        java 'java-19'
+        jdk 'java-19'
     }
     stages {
         stage('Build') {
